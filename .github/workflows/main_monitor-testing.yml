@@ -31,7 +31,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_444b18de6d7c425497052daeb049894a }}/Testing:${{ github.sha }}
+          tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AZURE_REGISTRY_USERNAME }}/Testing:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
