@@ -11,10 +11,15 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import JSONResponse, HTMLResponse
 
 
+
+
 # Logging Configuration
 logger = logging.getLogger()
-logger.addHandler(AzureLogHandler(connection_string="InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"))
+logger.addHandler(AzureLogHandler(connection_string="InstrumentationKey=86efe66a-ff4c-40b6-837b-7db9417ca81a;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"))
 logger.setLevel(logging.INFO)
+
+properties = {'custom_dimensions': {'key_1': 'value_1', 'key_2': 'value_2'}}
+
 
 app = FastAPI(title="Exception Catching API", description="API to test and catch exceptions")
 
@@ -43,7 +48,7 @@ async def create_item(item: Item):
         logger.info(f"Item created: {item.name}")
         return item
     except Exception as e:
-        logger.error(f"Error creating item: {str(e)}")
+        logger.exception(f"Error creating item: {str(e)}", extra=properties)
         raise
 
 @app.get("/items/{item_name}")
