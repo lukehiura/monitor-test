@@ -11,28 +11,27 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
 
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-      - name: Log in to container registry
-        uses: docker/login-action@v2
-        with:
-          registry: https://myuniquecontainerregistry123.azurecr.io/
-          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
-          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+    - name: Log in to registry
+      uses: docker/login-action@v2
+      with:
+        registry: https://myuniquecontainerregistry123.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_8e5eb01ac02742378287aeb4eff237c4 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_204481c1eedb436ba0868b9253a03dfd }}
 
-      - name: Build and push container image to registry
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AZURE_REGISTRY_USERNAME }}/Testing:${{ github.sha }}
-          file: ./Dockerfile
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_8e5eb01ac02742378287aeb4eff237c4 }}/myuniquecontainerregistry123.azurecr.io/monitortest:${{ github.sha }}
+        file: ./Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
@@ -42,11 +41,11 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'monitor-testing'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          images: 'myuniquecontainerregistry123.azurecr.io/${{ secrets.AZURE_REGISTRY_USERNAME }}/Testing:${{ github.sha }}'
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'monitor-testing'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_233125c2b95b45f8a139eacddf19055f }}
+        images: 'myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_8e5eb01ac02742378287aeb4eff237c4 }}/myuniquecontainerregistry123.azurecr.io/monitortest:${{ github.sha }}'
