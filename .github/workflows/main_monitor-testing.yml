@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://myuniquecontainerregistry123.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_8e5eb01ac02742378287aeb4eff237c4 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_204481c1eedb436ba0868b9253a03dfd }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_85916d9fd791430c8f596710c6804c95 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_e8e39fb82e5946d9bff4951825bc9cf5 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_8e5eb01ac02742378287aeb4eff237c4 }}/myuniquecontainerregistry123.azurecr.io/monitortest:${{ github.sha }}
+        tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_85916d9fd791430c8f596710c6804c95 }}/myuniquecontainerregistry123/myuniquecontainerregistry123.azurecr.io/monitortest:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'monitor-testing'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_233125c2b95b45f8a139eacddf19055f }}
-        images: 'myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_8e5eb01ac02742378287aeb4eff237c4 }}/myuniquecontainerregistry123.azurecr.io/monitortest:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_785115b3ac424055bf9f30d699ad2d70 }}
+        images: 'myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_85916d9fd791430c8f596710c6804c95 }}/myuniquecontainerregistry123/myuniquecontainerregistry123.azurecr.io/monitortest:${{ github.sha }}'
