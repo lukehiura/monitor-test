@@ -1,4 +1,6 @@
 docker login myuniquecontainerregistry123.azurecr.io --username myuniquecontainerregistry123 --password ymb/U302AdiSxod01LLXvwGY++JAD8C5rgrmbwO+nh+ACRA0X5qe
 
 
+making changest to life
+
 # password to the container registry found on access key
