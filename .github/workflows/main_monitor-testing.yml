@@ -34,19 +34,19 @@ jobs:
           tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_444b18de6d7c425497052daeb049894a }}/Testing:${{ github.sha }}
           file: ./Dockerfile
 
-    deploy:
-      runs-on: ubuntu-latest
-      needs: build
-      environment:
-        name: 'production'
-        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-      steps:
-        - name: Deploy to Azure Web App
-          id: deploy-to-webapp
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: 'monitor-testing'
-            slot-name: 'production'
-            publish-profile: ${{ secrets.AzureAppService_PublishProfile_3fddb51dc19c4f2ebf5d840d30dec83d }}
-            images: 'myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_444b18de6d7c425497052daeb049894a }}/Testing:${{ github.sha }}'
+    steps:
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'monitor-testing'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_3fddb51dc19c4f2ebf5d840d30dec83d }}
+          images: 'myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_444b18de6d7c425497052daeb049894a }}/Testing:${{ github.sha }}'
