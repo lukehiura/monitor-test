@@ -1,16 +1,17 @@
-from fastapi import FastAPI, HTTPException, Request
-from pydantic import BaseModel
-from typing import Optional
-from fastapi.templating import Jinja2Templates
-import uvicorn
 import logging
-from opencensus.ext.azure.log_exporter import AzureLogHandler
-from fastapi.openapi.utils import get_openapi
+from typing import Optional
+
+import uvicorn
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.openapi.docs import get_swagger_ui_html
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.openapi.utils import get_openapi
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.templating import Jinja2Templates
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 from opencensus.ext.azure.trace_exporter import AzureExporter
 from opencensus.trace.samplers import ProbabilitySampler
 from opencensus.trace.tracer import Tracer
+from pydantic import BaseModel
 
 tracer = Tracer(
     exporter=AzureExporter(
