@@ -6,6 +6,7 @@ azure-mgmt-core==1.4.0
 azure-mgmt-monitor==6.0.1
 azure-monitor-opentelemetry==1.0.0b13
 azure-monitor-opentelemetry-exporter==1.0.0b13
+black==23.3.0
 cachetools==5.3.1
 certifi==2023.5.7
 cffi==1.15.1
@@ -48,6 +49,8 @@ opentelemetry-sdk==1.17.0
 opentelemetry-semantic-conventions==0.38b0
 orjson==3.9.1
 packaging==23.1
+pathspec==0.11.1
+platformdirs==3.8.0
 pluggy==1.2.0
 portalocker==2.7.0
 protobuf==4.23.3
