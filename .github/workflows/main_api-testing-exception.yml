@@ -32,10 +32,26 @@ jobs:
         push: true
         tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_db6198d199a54beb85c30ee5a5e907f2 }}/fastapi-app:${{ github.sha }}
         file: ./Dockerfile
-        
-    - name: Run pytest
-      run: pytest
-      
+
+    - name: Install dependencies
+      run: |
+        pip install mypy flake8 pytest pytest-cov
+        pip install -r requirements.txt
+
+    - name: Lint with black
+      uses: psf/black@stable
+
+    - name: Lint with flake8
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=venv
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=89 --statistics --exclude=venv
+
+    - name: Lint with isort
+      uses: isort/isort-action@v1.0.0
+
+    - name: Check types with mypy
+      run: mypy main.py
+    
 
   deploy:
     runs-on: ubuntu-latest
