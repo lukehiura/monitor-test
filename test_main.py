@@ -1,9 +1,7 @@
 from fastapi.testclient import TestClient
 from main import (
     app,
-    Item,
 )  # make sure to replace 'main' with your actual file name if different
-from fastapi import HTTPException
 import warnings
 import logging
 

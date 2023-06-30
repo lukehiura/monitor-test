@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from typing import Optional
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
 import uvicorn
 import logging
 from opencensus.ext.azure.log_exporter import AzureLogHandler
@@ -15,7 +14,11 @@ from opencensus.trace.tracer import Tracer
 
 tracer = Tracer(
     exporter=AzureExporter(
-        connection_string="InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
+        connection_string=(
+            "InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463; "
+            "IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;"
+            "LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
+        )
     ),
     sampler=ProbabilitySampler(1.0),
 )
@@ -25,7 +28,11 @@ tracer = Tracer(
 logger = logging.getLogger()
 logger.addHandler(
     AzureLogHandler(
-        connection_string="InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
+        connection_string=(
+            "InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463; "
+            "IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;"
+            "LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
+        )
     )
 )
 logger.setLevel(logging.INFO)
@@ -88,7 +95,7 @@ async def divide_by_zero():
     """
     properties = {"custom_dimensions": {"key_1": "value_1", "key_2": "value_2"}}
     try:
-        result = 1 / 0  # Generate a ZeroDivisionError
+        _ = 1 / 0  # Generate a ZeroDivisionError
     except Exception:
         logger.exception("Captured an exception.", extra=properties)
         raise HTTPException(status_code=400, detail="Division by zero error")
@@ -102,7 +109,7 @@ async def key_error():
     properties = {"custom_dimensions": {"key_1": "value_1", "key_2": "value_2"}}
     try:
         my_dict = {"key": "value"}
-        value = my_dict["non_existent_key"]  # Generate a KeyError
+        _ = my_dict["non_existent_key"]  # Generate a KeyError
     except Exception:
         logger.exception("Captured an exception.", extra=properties)
         raise HTTPException(status_code=400, detail="Key error")
