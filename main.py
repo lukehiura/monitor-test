@@ -15,7 +15,7 @@ from opencensus.trace.tracer import Tracer
 
 tracer = Tracer(
     exporter=AzureExporter(
-        connection_string='InstrumentationKey=<your-instrumentation-key>;IngestionEndpoint=<your-ingestion-endpoint>'
+        connection_string="InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
     ),
     sampler=ProbabilitySampler(1.0),
 )
@@ -40,6 +40,8 @@ class Item(BaseModel):
 
 # Store items in a dictionary for this example
 items = {}
+
+
 
 @app.post("/items/")
 async def create_item(item: Item):
@@ -80,7 +82,7 @@ async def divide_by_zero():
         result = 1 / 0  # Generate a ZeroDivisionError
     except Exception:
         logger.exception('Captured an exception.', extra=properties)
-        raise
+        raise HTTPException(status_code=400, detail="Division by zero error")
 
 @app.get("/key-error")
 async def key_error():
@@ -93,7 +95,8 @@ async def key_error():
         value = my_dict['non_existent_key']  # Generate a KeyError
     except Exception:
         logger.exception('Captured an exception.', extra=properties)
-        raise
+        raise HTTPException(status_code=400, detail="Key error")
+
 
 # Endpoint for the navigation page
 @app.get("/", response_class=HTMLResponse)

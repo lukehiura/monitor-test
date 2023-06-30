@@ -32,6 +32,10 @@ jobs:
         push: true
         tags: myuniquecontainerregistry123.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_db6198d199a54beb85c30ee5a5e907f2 }}/fastapi-app:${{ github.sha }}
         file: ./Dockerfile
+        
+    - name: Run pytest
+      run: pytest
+      
 
   deploy:
     runs-on: ubuntu-latest
