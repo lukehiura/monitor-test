@@ -23,13 +23,20 @@ tracer = Tracer(
 
 # Logging Configuration
 logger = logging.getLogger()
-logger.addHandler(AzureLogHandler(connection_string="InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"))
+logger.addHandler(
+    AzureLogHandler(
+        connection_string="InstrumentationKey=9fecf82f-83e4-4a24-8976-de12ae6f0463;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/"
+    )
+)
 logger.setLevel(logging.INFO)
 
-app = FastAPI(title="Exception Catching API", description="API to test and catch exceptions")
+app = FastAPI(
+    title="Exception Catching API", description="API to test and catch exceptions"
+)
 
 # Use Jinja2Templates for HTML rendering
 templates = Jinja2Templates(directory="templates")
+
 
 # Define a simple model for demonstration
 class Item(BaseModel):
@@ -38,9 +45,9 @@ class Item(BaseModel):
     price: float
     quantity: int
 
+
 # Store items in a dictionary for this example
 items = {}
-
 
 
 @app.post("/items/")
@@ -58,6 +65,7 @@ async def create_item(item: Item):
         logger.error(f"Error creating item: {str(e)}")
         raise
 
+
 @app.get("/items/{item_name}")
 async def read_item(item_name: str):
     """
@@ -72,29 +80,31 @@ async def read_item(item_name: str):
         logger.error(f"Error reading item: {str(e)}")
         raise
 
+
 @app.get("/divide-by-zero")
 async def divide_by_zero():
     """
     Generate a ZeroDivisionError.
     """
-    properties = {'custom_dimensions': {'key_1': 'value_1', 'key_2': 'value_2'}}
+    properties = {"custom_dimensions": {"key_1": "value_1", "key_2": "value_2"}}
     try:
         result = 1 / 0  # Generate a ZeroDivisionError
     except Exception:
-        logger.exception('Captured an exception.', extra=properties)
+        logger.exception("Captured an exception.", extra=properties)
         raise HTTPException(status_code=400, detail="Division by zero error")
+
 
 @app.get("/key-error")
 async def key_error():
     """
     Generate a KeyError.
     """
-    properties = {'custom_dimensions': {'key_1': 'value_1', 'key_2': 'value_2'}}
+    properties = {"custom_dimensions": {"key_1": "value_1", "key_2": "value_2"}}
     try:
-        my_dict = {'key': 'value'}
-        value = my_dict['non_existent_key']  # Generate a KeyError
+        my_dict = {"key": "value"}
+        value = my_dict["non_existent_key"]  # Generate a KeyError
     except Exception:
-        logger.exception('Captured an exception.', extra=properties)
+        logger.exception("Captured an exception.", extra=properties)
         raise HTTPException(status_code=400, detail="Key error")
 
 
@@ -106,6 +116,7 @@ async def navigation_page(request: Request):
     """
     return templates.TemplateResponse("navigation.html", {"request": request})
 
+
 # Root endpoint to render the HTML template
 @app.get("/home", response_class=HTMLResponse)
 async def home_page(request: Request):
@@ -113,6 +124,7 @@ async def home_page(request: Request):
     Render the home page.
     """
     return templates.TemplateResponse("index.html", {"request": request})
+
 
 # Generate OpenAPI schema
 def custom_openapi():
@@ -127,10 +139,12 @@ def custom_openapi():
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
+
 # Route for serving OpenAPI JSON schema
 @app.get("/openapi.json")
 def get_openapi_endpoint():
     return JSONResponse(content=custom_openapi())
+
 
 # Route for serving Swagger UI HTML page
 @app.get("/docs", response_class=HTMLResponse)
@@ -139,6 +153,7 @@ def swagger_ui_html():
         openapi_url="/openapi.json",
         title=app.title,
     )
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
