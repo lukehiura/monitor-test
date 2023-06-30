@@ -1,9 +1,10 @@
-from fastapi.testclient import TestClient
-from main import (
-    app,
-)  # make sure to replace 'main' with your actual file name if different
-import warnings
 import logging
+import warnings
+
+from fastapi.testclient import TestClient
+
+from main import \
+    app  # make sure to replace 'main' with your actual file name if different
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
